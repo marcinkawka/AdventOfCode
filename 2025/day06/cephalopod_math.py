@@ -1,7 +1,4 @@
 
-from unittest import case
-from soupsieve import match
-
 
 i=0
 el=[]
