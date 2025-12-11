@@ -31,11 +31,12 @@ def solve_machine(pattern, buttons, joltage):
         target = 1 if pattern[i] == "#" else 0
         involved = [j for j, btn in enumerate(buttons) if i in btn]
         model += pulp.lpSum(x[j] for j in involved) - 2 * y[i] == target
+
         # t_i = sum of presses on buttons that affect lamp i
         model += t[i] == pulp.lpSum(x[j] for j in involved)
 
         # capacity: toggle exactly joltage[i] times
-        model += t[i] == joltage[i]
+        #model += t[i] == joltage[i]
 
     status = model.solve(pulp.PULP_CBC_CMD(msg=False))
     print(pulp.LpStatus[status])
