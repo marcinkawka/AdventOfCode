@@ -21,8 +21,7 @@ all_paths = all_simple_paths(G, source='svr', target='out')
 print("Got all simple paths from 'svr' to 'out', filtering in parallel...")
 count = 0
 with Pool(processes=32) as pool:
-    for ok in pool.imap_unordered(match_fft_dac, all_paths, chunksize=10_000):
-        if ok:
-            count += 1
+    count += sum(pool.imap_unordered(match_fft_dac, all_paths, chunksize=10_000))
+
             
 print(f"There are in total {count} proper paths")
