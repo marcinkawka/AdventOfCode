@@ -2,8 +2,8 @@ import networkx as nx
 from networkx.algorithms import all_simple_paths
 from multiprocessing import Pool, cpu_count
 
-def keep_path(p):
-    return 'fft' in p and 'dac' in p
+def match_fft_dac(p):
+    return ('fft' in p) and ('dac' in p)
 
 G = nx.DiGraph()
 counter=0
@@ -19,9 +19,10 @@ with open('input.txt', 'r') as f:
 all_paths = all_simple_paths(G, source='svr', target='out')
 
 print("Got all simple paths from 'svr' to 'out', filtering in parallel...")
+count = 0
 with Pool(processes=32) as pool:
-    for ok, p in zip(pool.imap_unordered(keep_path, all_paths, chunksize=10_000), all_paths):
+    for ok in pool.imap_unordered(match_fft_dac, all_paths, chunksize=10_000):
         if ok:
-            valid_paths.append(p)
+            count += 1
             
-print(f"There are in total {len(valid_paths)} proper paths")
+print(f"There are in total {count} proper paths")
